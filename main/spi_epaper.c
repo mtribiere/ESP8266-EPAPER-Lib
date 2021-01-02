@@ -38,7 +38,6 @@ const char *TAG = "spi_epaper";
 #include "spiEPD.h"
 #include "EPD.h"
 #include "painterEPD.h"
-//#include "img.h" 
 
 void app_main(void)
 {
@@ -56,12 +55,9 @@ void app_main(void)
 
     ESP_LOGI(TAG, "Init sequence done");
 
-
     //Draw some stuff
     epaper_clear();
-    epaper_draw_square(10,10,10);
-    epaper_draw_square(30,30,30);
-    epaper_draw_square(70,70,70);
+    epaper_draw_string("Hello world !",13,30,90,20);
     epaper_update();
 
 }
