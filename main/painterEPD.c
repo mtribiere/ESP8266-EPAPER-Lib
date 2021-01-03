@@ -1,5 +1,8 @@
 #include "painterEPD.h"
-#include "font20.h"
+
+#include "font/font20.h"
+#include "font/font12.h"
+
 esp_err_t epaper_draw_square(uint8_t x, uint8_t y,uint8_t size){
 
     //Draw a black square in screenBuffer
@@ -16,6 +19,13 @@ esp_err_t epaper_draw_square(uint8_t x, uint8_t y,uint8_t size){
 }
 
 esp_err_t epaper_draw_pixel(uint8_t x, uint8_t y, uint8_t value){
+
+    //If coordinates not in range
+    if(y >= EPD_HEIGHT || x >= EPD_WIDTH){
+        printf("Coor error : (%d;%d)\n",x,y);
+        return ESP_FAIL;
+    }
+    
 
     //If the value is white
     if(value){
@@ -37,11 +47,21 @@ esp_err_t epaper_draw_char(char c,uint8_t x, uint8_t y, uint8_t fontSize){
     uint8_t fontPW;
     uint8_t fontPH;
 
+    //Charset pointer
+    uint8_t *charset = NULL;
+
     //Find the correct font size
     switch(fontSize){
         case 20:
             fontPW = FONT_20_WIDTH;
             fontPH = FONT_20_HEIGHT;
+            charset = Font_20_table;
+            break;
+        
+        case 12:
+            fontPW = FONT_12_WIDTH;
+            fontPH = FONT_12_HEIGHT;
+            charset = Font_12_table;
             break;
         
         default:
@@ -50,15 +70,15 @@ esp_err_t epaper_draw_char(char c,uint8_t x, uint8_t y, uint8_t fontSize){
 
     }
 
-    fontH = FONT_20_HEIGHT;
-    fontW = (FONT_20_WIDTH%8 == 0 ? FONT_20_WIDTH/8 : FONT_20_WIDTH/8+1);
+    fontH = fontPH;
+    fontW = ((fontPW%8 == 0) ? fontPW/8 : fontPW/8+1);
    
 
     //Compute offset
     uint32_t charOffset = (c - ' ')*(fontW*fontH);
 
     //Draw the char in reverse Y order
-    y += (fontPH-1);
+    y += fontPH;
 
     uint8_t startX = x;
     
@@ -74,7 +94,7 @@ esp_err_t epaper_draw_char(char c,uint8_t x, uint8_t y, uint8_t fontSize){
         for(int k = 0;k<8;k++){
 
             //If the pixel need to be black
-            if(Font_20_table[charOffset+i] & (0x80 >> k))
+            if(charset[charOffset+i] & (0x80 >> k))
                 epaper_draw_pixel(x,y,0);
             
             //Proceed to next pixel
@@ -97,15 +117,40 @@ esp_err_t epaper_draw_string(char *str,uint32_t size,uint8_t x, uint8_t y, uint8
     return ESP_OK;
 }
 
-esp_err_t epaper_draw_img_fill(uint8_t x, uint8_t y, uint8_t *img){
+esp_err_t epaper_draw_img(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t *img){
 
-    int imgOffset = 0;
-    for(int j = SCREEN_BUFFER_H-1; j>0;j--) {
-        for(int i = 0; i<SCREEN_BUFFER_W;i++){
-            screenBuffer[i][j] = img[imgOffset];
-            imgOffset++;
+    //Compute the number of bytes to draw
+    uint8_t hByte = h;
+    uint8_t wByte = (w%8 == 0 ? w/8 : w/8+1);
+
+    //Draw the img in reverse Y order
+    y += h;
+
+    uint8_t startX = x;
+    
+    //For each byte of the img
+    for(int i = 0;i< hByte * wByte;i++){
+
+        //If the line ends
+        if(i%wByte == 0){
+            y--;
+            x = startX;
         }
+
+        for(int k = 0;k<8;k++){
+
+            //If the pixel need to be black
+            if(img[i] & (0x80 >> k))
+                epaper_draw_pixel(x,y,0);
+            
+            //Proceed to next pixel
+            x++;
+
+        }
+     
+
     }
+    
 
     return ESP_OK;
 }
