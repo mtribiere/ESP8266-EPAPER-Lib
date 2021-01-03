@@ -38,10 +38,13 @@ const char *TAG = "spi_epaper";
 #include "spiEPD.h"
 #include "EPD.h"
 #include "painterEPD.h"
-//#include "img.h" 
+#include "img/sun.h"
 
 void app_main(void)
 {
+    printf("====== Welcome to FreeRTOS ========\n");
+    printf("====== ESP8266 Booting up..... ========\n");
+
     //Init GPIO
     ESP_LOGI(TAG, "Init GPIO");
     init_GPIO();
@@ -55,13 +58,16 @@ void app_main(void)
     epaper_init();
 
     ESP_LOGI(TAG, "Init sequence done");
-
-
+    
     //Draw some stuff
     epaper_clear();
-    epaper_draw_square(10,10,10);
-    epaper_draw_square(30,30,30);
-    epaper_draw_square(70,70,70);
+    epaper_draw_img(65,90,SUN_H,SUN_W,sunImg);
+    epaper_draw_string("Hello world !",13,35,60,20);
+    epaper_draw_string("from ESP8266",12,40,52,12);
+    
+    //Update the screen
     epaper_update();
+
+    printf("Done\n");
 
 }
