@@ -1,5 +1,5 @@
 # ESP8266-EPAPER-Lib
-An complete library for driving <b>Epaper display from Waveshare</b>. It's built from the ground up using the public SDK <b>FreeRTOS only</b>.
+An still in development library for driving <b>Epaper display from Waveshare</b>. It's built from the ground up using the public SDK <b>FreeRTOS only</b>.
 It has been succeffuly tested on an ESP12E based board with a 1.54" V2 screen. However it should work for any screen size with minor changes.
 
 # Demo
