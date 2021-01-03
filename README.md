@@ -3,7 +3,7 @@ An complete library for driving <b>Epaper display from Waveshare</b>. It's built
 It has been succeffuly tested on an ESP12E based board with a 1.54" V2 screen. However it should work for any screen size with minor changes.
 
 # Demo
-![](https://github.com/mtribiere/ESP8266-EPAPER-Lib/blob/dev/Pics/IMG_20210103_182554.jpg)
+<img src="Pics/IMG_20210103_182554.jpg" width="600">
 
 # Wiring
 | Epaper PIN | ESP Board PIN | FreeRTOS PIN
