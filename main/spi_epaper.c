@@ -38,6 +38,8 @@ const char *TAG = "spi_epaper";
 #include "spiEPD.h"
 #include "EPD.h"
 #include "painterEPD.h"
+#include "font/font12.h"
+#include "font/font20.h"
 #include "img/sun.h"
 
 void app_main(void)
@@ -61,8 +63,9 @@ void app_main(void)
     ESP_LOGI(TAG, "Drawing to the screen");
     epaper_clear();
     epaper_draw_img(65,90,SUN_H,SUN_W,sunImg);
-    epaper_draw_string("Hello world !",13,35,60,20);
-    epaper_draw_string("from ESP8266",12,40,52,12);
+
+    epaper_draw_string("Hello world !",13,35,60,font20);
+    epaper_draw_string("from ESP8266",12,40,52,font12);
     
     //Update the screen
     epaper_update();
@@ -70,6 +73,6 @@ void app_main(void)
     //Turn off the display
     epaper_deepsleep();
 
-    printf("====== Done have a nice day ! ========\n");
+    printf("====== Done, have a nice day ! ========\n");
 
 }

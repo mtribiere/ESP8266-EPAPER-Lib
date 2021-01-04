@@ -1375,6 +1375,11 @@ uint8_t Font_12_table[] =
 	0x00, //        
 	0x00, //        
 };
+
+Font font12 = {FONT_12_WIDTH,
+			FONT_12_HEIGHT,
+			Font_12_table};
+
 #endif
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
