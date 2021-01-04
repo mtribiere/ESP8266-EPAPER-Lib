@@ -56,10 +56,9 @@ void app_main(void)
     //Init EPAPER display
     ESP_LOGI(TAG, "Init EPAPER display");
     epaper_init();
-
-    ESP_LOGI(TAG, "Init sequence done");
     
     //Draw some stuff
+    ESP_LOGI(TAG, "Drawing to the screen");
     epaper_clear();
     epaper_draw_img(65,90,SUN_H,SUN_W,sunImg);
     epaper_draw_string("Hello world !",13,35,60,20);
@@ -68,6 +67,9 @@ void app_main(void)
     //Update the screen
     epaper_update();
 
-    printf("Done\n");
+    //Turn off the display
+    epaper_deepsleep();
+
+    printf("====== Done have a nice day ! ========\n");
 
 }
