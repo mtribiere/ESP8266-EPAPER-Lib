@@ -1,23 +1,5 @@
 #include "painterEPD.h"
 
-#include "font/font20.h"
-#include "font/font12.h"
-
-esp_err_t epaper_draw_square(uint8_t x, uint8_t y,uint8_t size){
-
-    //Draw a black square in screenBuffer
-    for(int j=y;j<y+size;j++){
-
-        for(int i=x;i<x+size;i++){
-
-            epaper_draw_pixel(i,j,0);
-
-        }
-
-    }
-    return ESP_OK;
-}
-
 esp_err_t epaper_draw_pixel(uint8_t x, uint8_t y, uint8_t value){
 
     //If coordinates not in range
@@ -37,41 +19,83 @@ esp_err_t epaper_draw_pixel(uint8_t x, uint8_t y, uint8_t value){
     return ESP_OK;
 }
 
-esp_err_t epaper_draw_char(char c,uint8_t x, uint8_t y, uint8_t fontSize){
+esp_err_t epaper_draw_square(uint8_t x, uint8_t y,uint8_t size){
 
-    //Font size in bytes
-    uint8_t fontW;
-    uint8_t fontH;
-    
-    //Font size in pixel
-    uint8_t fontPW;
-    uint8_t fontPH;
+    //Draw a black square in screenBuffer
+    for(int j=y;j<y+size;j++){
 
-    //Charset pointer
-    uint8_t *charset = NULL;
+        for(int i=x;i<x+size;i++){
 
-    //Find the correct font size
-    switch(fontSize){
-        case 20:
-            fontPW = FONT_20_WIDTH;
-            fontPH = FONT_20_HEIGHT;
-            charset = Font_20_table;
-            break;
-        
-        case 12:
-            fontPW = FONT_12_WIDTH;
-            fontPH = FONT_12_HEIGHT;
-            charset = Font_12_table;
-            break;
-        
-        default:
-            return ESP_FAIL;
-            break;
+            epaper_draw_pixel(i,j,BLACK);
+
+        }
 
     }
+    return ESP_OK;
+}
 
-    fontH = fontPH;
-    fontW = ((fontPW%8 == 0) ? fontPW/8 : fontPW/8+1);
+esp_err_t epaper_draw_line(uint8_t x, uint8_t y, enum Direction direction, uint8_t length ,uint8_t width){
+
+    uint8_t drawed = 0; 
+    
+    //Should not be multiple of 2 to keep line alignment
+    if(width%2 == 0)
+        width--;
+    
+
+    //While not all line is drawned 
+    while(drawed < length){
+
+        //For each direction draw the pixel row
+        switch(direction){
+            case UP:
+                for(int i = 0;i<width;i++)
+                    epaper_draw_pixel(x-((width-1)/2) + i,y,BLACK);
+                y++;
+                break;
+            
+            case RIGHT:
+                for(int i = 0;i<width;i++)
+                    epaper_draw_pixel(x,y + ((width-1)/2) - i,BLACK);
+                x++;
+                break;
+            
+            case DOWN:
+                for(int i = 0;i<width;i++)
+                    epaper_draw_pixel(x-((width-1)/2) + i,y,BLACK);
+                y--;
+                break;
+            
+            case LEFT:
+                for(int i = 0;i<width;i++)
+                    epaper_draw_pixel(x,y + ((width-1)/2) - i,BLACK);
+                x--;
+                break;
+            
+            default:
+                return ESP_FAIL;
+                break;
+
+        }
+
+        drawed++;
+    }
+
+    return ESP_OK;
+
+}
+
+esp_err_t epaper_draw_char(char c,uint8_t x, uint8_t y, Font font){
+    
+    //Font size in pixel
+    uint8_t fontPW = font.fontW;
+    uint8_t fontPH = font.fontH;
+
+    //Charset pointer
+    uint8_t *charset = font.charset;
+
+    uint8_t fontH = fontPH;
+    uint8_t fontW = ((fontPW%8 == 0) ? fontPW/8 : fontPW/8+1);
    
 
     //Compute offset
@@ -95,7 +119,7 @@ esp_err_t epaper_draw_char(char c,uint8_t x, uint8_t y, uint8_t fontSize){
 
             //If the pixel need to be black
             if(charset[charOffset+i] & (0x80 >> k))
-                epaper_draw_pixel(x,y,0);
+                epaper_draw_pixel(x,y,BLACK);
             
             //Proceed to next pixel
             x++;
@@ -108,10 +132,10 @@ esp_err_t epaper_draw_char(char c,uint8_t x, uint8_t y, uint8_t fontSize){
     return ESP_OK;
 }
 
-esp_err_t epaper_draw_string(char *str,uint32_t size,uint8_t x, uint8_t y, uint8_t fontSize){
+esp_err_t epaper_draw_string(char *str,uint32_t size,uint8_t x, uint8_t y, Font font){
 
     for(int i = 0;i<size;i++){
-        epaper_draw_char(str[i],x+i*10,y,fontSize);
+        epaper_draw_char(str[i],x+i*10,y,font);
     }
 
     return ESP_OK;
@@ -141,7 +165,7 @@ esp_err_t epaper_draw_img(uint8_t x, uint8_t y, uint8_t w, uint8_t h,uint8_t *im
 
             //If the pixel need to be black
             if(img[i] & (0x80 >> k))
-                epaper_draw_pixel(x,y,0);
+                epaper_draw_pixel(x,y,BLACK);
             
             //Proceed to next pixel
             x++;

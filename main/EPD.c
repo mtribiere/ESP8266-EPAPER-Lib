@@ -84,3 +84,13 @@ esp_err_t epaper_clear(){
 
     return ESP_OK;
 }
+
+esp_err_t epaper_deepsleep(){
+
+    //Send deep sleep command
+    epaper_write_cmd(0x10);
+    epaper_write_data(0x01);
+
+    return ESP_OK;
+
+}

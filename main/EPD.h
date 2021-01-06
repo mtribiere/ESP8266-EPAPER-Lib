@@ -26,5 +26,6 @@ esp_err_t epaper_init();
 esp_err_t epaper_update();
 esp_err_t epaper_clear();
 
+esp_err_t epaper_deepsleep();
 
 #endif

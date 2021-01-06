@@ -2134,5 +2134,11 @@ uint8_t Font_20_table[] =
 	0x00, 0x00, //               
 	0x00, 0x00 //               
 };
+
+
+Font font20 = {FONT_20_WIDTH,
+			FONT_20_HEIGHT,
+			Font_20_table};
+			
 #endif
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
