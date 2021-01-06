@@ -15,5 +15,13 @@ It has been successfully tested on an ESP12E-based board with a 1.54" V2 EPaper 
 | CLK | D5 | HSPI_CLK |
 | DIN | D7 | HSPI_MOSI |
 
+# Technical informations & porting guide
+* **Coordinate system** : By default the (0;0) point is a the bottom left corner of the screen
+<img src="Pics/Epaper_schema.png" width="300">
+
+* **Image conversion** : To convert an image, you need to use a software that do the convertion from top to bottom, and left to right.
+
+* **For bigger screens** : The current x and y arguments use _uint8_t_ format. However to use bigger screen you need to increase it to _uint16_t_ or _uint32_t_.
+
 # Author
 Made with ❤️ by mtribiere
