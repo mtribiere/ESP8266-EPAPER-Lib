@@ -1,5 +1,13 @@
 #include "spiEPD.h"
 
+static void IRAM_ATTR gpio_isr_handler(void *arg)
+{
+    //If the received interrupt is from BSY pin
+    if((uint32_t)arg == EPAPER_BSY_GPIO)
+        isEpaperBusy = gpio_get_level(EPAPER_BSY_GPIO);
+    
+}
+
 esp_err_t delay_ms(uint32_t time)
 {
     vTaskDelay(time / portTICK_RATE_MS);
@@ -8,10 +16,11 @@ esp_err_t delay_ms(uint32_t time)
 
 esp_err_t waitUntilIdle(){
 
-    while(gpio_get_level(EPAPER_BSY_GPIO) == 1) {     
-		delay_ms(100);
-	}
+    delay_ms(10);
 
+    while(isEpaperBusy);
+
+    delay_ms(100);
     return ESP_OK;
 }
 
@@ -102,12 +111,21 @@ esp_err_t init_GPIO(){
     gpio_config(&io_conf);
 
     //Init input GPIO
-    io_conf.intr_type = GPIO_INTR_DISABLE;
+    io_conf.intr_type = GPIO_INTR_ANYEDGE;
     io_conf.mode = GPIO_MODE_INPUT;
     io_conf.pin_bit_mask = EPAPER_PIN_INPUT_SEL;
-    io_conf.pull_down_en = 0;
+    io_conf.pull_down_en = 1;
     io_conf.pull_up_en = 0;
     gpio_config(&io_conf);
+
+    //install gpio isr service
+    gpio_install_isr_service(0);
+
+    //Hook the handler to the pin
+    gpio_isr_handler_add(EPAPER_BSY_GPIO, gpio_isr_handler, (void *)EPAPER_BSY_GPIO);
+
+    //Set the default state to unbusy
+    isEpaperBusy = 0;
 
     return ESP_OK;
 }
