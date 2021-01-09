@@ -26,11 +26,10 @@ esp_err_t waitUntilIdle(){
 
 esp_err_t epaper_rst()
 {
-    gpio_set_level(EPAPER_RST_GPIO, 1);
-    delay_ms(200);
     gpio_set_level(EPAPER_RST_GPIO, 0);
     delay_ms(10);
     gpio_set_level(EPAPER_RST_GPIO, 1);
+ 
     delay_ms(200);
     return ESP_OK;
 }
@@ -171,6 +170,7 @@ esp_err_t init_SPI(){
     trans.cmd = NULL;
     trans.addr = NULL;
     trans.mosi = NULL;
+    trans.miso = NULL;
 
     return ESP_OK;
 }

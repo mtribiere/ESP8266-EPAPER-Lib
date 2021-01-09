@@ -1,5 +1,17 @@
 #include "painterEPD.h"
 
+
+esp_err_t epaper_inverse_color(){
+
+    for(int j = 0;j<SCREEN_BUFFER_H;j++){
+        for(int i = 0;i<SCREEN_BUFFER_W;i++){
+            screenBuffer[i][j] = ~screenBuffer[i][j];
+        }
+    }
+    
+    return ESP_OK;
+}
+
 esp_err_t epaper_draw_pixel(uint8_t x, uint8_t y, uint8_t value){
 
     //If coordinates not in range
@@ -34,56 +46,30 @@ esp_err_t epaper_draw_square(uint8_t x, uint8_t y,uint8_t size){
     return ESP_OK;
 }
 
-esp_err_t epaper_draw_line(uint8_t x, uint8_t y, enum Direction direction, uint8_t length ,uint8_t width){
+esp_err_t epaper_draw_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
-    uint8_t drawed = 0; 
-    
-    //Should not be multiple of 2 to keep line alignment
-    if(width%2 == 0)
-        width--;
-    
+    /* Bresenham line algorithm */
+    int dx = x1 - x0 >= 0 ? x1 - x0 : x0 - x1;
+    int sx = x0 < x1 ? 1 : -1;
+    int dy = y1 - y0 <= 0 ? y1 - y0 : y0 - y1;
+    int sy = y0 < y1 ? 1 : -1;
+    int err = dx + dy;
 
-    //While not all line is drawned 
-    while(drawed < length){
-
-        //For each direction draw the pixel row
-        switch(direction){
-            case UP:
-                for(int i = 0;i<width;i++)
-                    epaper_draw_pixel(x-((width-1)/2) + i,y,BLACK);
-                y++;
-                break;
-            
-            case RIGHT:
-                for(int i = 0;i<width;i++)
-                    epaper_draw_pixel(x,y + ((width-1)/2) - i,BLACK);
-                x++;
-                break;
-            
-            case DOWN:
-                for(int i = 0;i<width;i++)
-                    epaper_draw_pixel(x-((width-1)/2) + i,y,BLACK);
-                y--;
-                break;
-            
-            case LEFT:
-                for(int i = 0;i<width;i++)
-                    epaper_draw_pixel(x,y + ((width-1)/2) - i,BLACK);
-                x--;
-                break;
-            
-            default:
-                return ESP_FAIL;
-                break;
-
+    while((x0 != x1) && (y0 != y1)) {
+        epaper_draw_pixel(x0, y0 , BLACK);
+        if (2 * err >= dy) {     
+            err += dy;
+            x0 += sx;
         }
-
-        drawed++;
+        if (2 * err <= dx) {
+            err += dx; 
+            y0 += sy;
+        }
     }
 
     return ESP_OK;
-
 }
+
 
 esp_err_t epaper_draw_char(char c,uint8_t x, uint8_t y, Font font){
     

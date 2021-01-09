@@ -51,6 +51,8 @@ esp_err_t epaper_update(){
     //Set RAM position
     epaper_write_cmd(0x4E);
     epaper_write_data(0x00);
+    
+    waitUntilIdle();
 
     epaper_write_cmd(0x4F);
     epaper_write_data(0x00);
@@ -66,6 +68,7 @@ esp_err_t epaper_update(){
 		}
 	}
 
+    waitUntilIdle();
 
     //Send update command
     epaper_write_cmd(0x22);
@@ -86,6 +89,8 @@ esp_err_t epaper_clear(){
 }
 
 esp_err_t epaper_deepsleep(){
+
+    waitUntilIdle();
 
     //Send deep sleep command
     epaper_write_cmd(0x10);
