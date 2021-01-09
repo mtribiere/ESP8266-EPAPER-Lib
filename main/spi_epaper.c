@@ -44,8 +44,8 @@ const char *TAG = "spi_epaper";
 
 void app_main(void)
 {
-    printf("====== Welcome to FreeRTOS ========\n");
-    printf("====== ESP8266 Booting up..... ========\n");
+    //printf("====== Welcome to FreeRTOS ========\n");
+   // printf("====== ESP8266 Booting up..... ========\n");
 
     //Init GPIO
     ESP_LOGI(TAG, "Init GPIO");
