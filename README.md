@@ -1,5 +1,5 @@
   + New : A conversion tool for images : https://github.com/mtribiere/EPAPER_Image_Converter
-# ESP8266-EPAPER-Lib
+# ESP8266-EPAPER-Lib [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 An still in development library for driving <b>Epaper display from Waveshare</b>. It's built from the ground up using the public SDK <b>FreeRTOS only</b>.
 It has been successfully tested on an ESP12E-based board with a 1.54" V2 EPaper screen. However it should work for any screen size with minor changes.
 
