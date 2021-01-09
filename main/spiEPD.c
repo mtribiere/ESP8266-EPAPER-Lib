@@ -137,10 +137,10 @@ esp_err_t init_SPI(){
     // Load default interface parameters
     // CS_EN:1, MISO_EN:1, MOSI_EN:1, BYTE_TX_ORDER:1, BYTE_TX_ORDER:1, BIT_RX_ORDER:0, BIT_TX_ORDER:0, CPHA:0, CPOL:0
     spi_config.interface.val = SPI_DEFAULT_INTERFACE;
-    // Load default interrupt enable
-    // TRANS_DONE: true, WRITE_STATUS: false, READ_STATUS: false, WRITE_BUFFER: false, READ_BUFFER: false
-    spi_config.intr_enable.val = SPI_MASTER_DEFAULT_INTR_ENABLE;
-    spi_config.mode = SPI_MASTER_MODE;
+    // Turn off default interrupt enable
+    spi_intr_enable_t intr_config = {0};
+    spi_config.intr_enable = intr_config;
+    // Enable MOSI pin
     spi_config.interface.mosi_en = 1;
     // Cancel hardware cs
     spi_config.interface.cs_en = 0;
@@ -154,8 +154,6 @@ esp_err_t init_SPI(){
     spi_config.mode = SPI_MASTER_MODE;
     // Set the SPI clock frequency division factor
     spi_config.clk_div = SPI_2MHz_DIV;
-    // Register SPI event callback function
-    spi_config.event_cb = NULL;
 
     spi_config.interface.byte_tx_order = SPI_BYTE_ORDER_MSB_FIRST;
     spi_config.interface.bit_tx_order = SPI_BIT_ORDER_LSB_FIRST;
