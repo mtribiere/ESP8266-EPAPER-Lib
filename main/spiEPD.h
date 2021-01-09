@@ -24,7 +24,8 @@
 #define EPAPER_PIN_OUTPUT_SEL  (1ULL<<EPAPER_DC_GPIO) | (1ULL<<EPAPER_RST_GPIO) | (1ULL<<EPAPER_CS_GPIO)
 #define EPAPER_PIN_INPUT_SEL (1ULL<<EPAPER_BSY_GPIO)
 
- spi_trans_t trans;
+spi_trans_t trans;
+uint8_t isEpaperBusy;
 
 esp_err_t delay_ms(uint32_t time);
 esp_err_t waitUntilIdle();
