@@ -4,7 +4,7 @@ An still in development library for driving <b>Epaper display from Waveshare</b>
 It has been successfully tested on an ESP12E-based board with a 1.54" V2 EPaper screen. However it should work for any screen size with minor changes.
 
 # Demo
-<img src="Pics/IMG_20210103_182554.jpg" width="500">
+<img src="Pics/IMG_20210103_182554.jpg" width="600">
 
 # Install
 👉 [Go to the project Wiki](https://github.com/mtribiere/ESP8266-EPAPER-Lib/wiki)
