@@ -43,7 +43,7 @@
 #define FONT_12_HEIGHT 12
 
 //  Font data for Courier New 12pt
-uint8_t Font_12_table[] = 
+uint8_t Font_12_table[] PROGMEM = 
 {
 	// @0 ' ' (7 pixels wide)
 	0x00, //        
