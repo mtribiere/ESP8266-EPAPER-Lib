@@ -66,8 +66,6 @@ void app_main(void)
     epaper_draw_string("Hello world !",13,35,60,font20);
     epaper_draw_string("from ESP8266",12,40,52,font12);
 
-    epaper_draw_line(10,10,40,10);
-
     //Update the screen
     epaper_update();
 

@@ -48,24 +48,54 @@ esp_err_t epaper_draw_square(uint8_t x, uint8_t y,uint8_t size){
 
 esp_err_t epaper_draw_line(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
 
-    /* Bresenham line algorithm */
-    int dx = x1 - x0 >= 0 ? x1 - x0 : x0 - x1;
-    int sx = x0 < x1 ? 1 : -1;
-    int dy = y1 - y0 <= 0 ? y1 - y0 : y0 - y1;
-    int sy = y0 < y1 ? 1 : -1;
-    int err = dx + dy;
+   //If straight vertical line
+   if(x0 == x1){
 
-    while((x0 != x1) && (y0 != y1)) {
-        epaper_draw_pixel(x0, y0 , BLACK);
-        if (2 * err >= dy) {     
-            err += dy;
-            x0 += sx;
+        while(y0 != y1){
+            epaper_draw_pixel(x0, y0 , BLACK);
+            if(y0<y1)
+                y0++;
+            else
+                y0--;
         }
-        if (2 * err <= dx) {
-            err += dx; 
-            y0 += sy;
+
+
+    }else{
+
+        //If straight horizontal line
+        if(y0 == y1){
+
+            while(x0 != x1){
+                epaper_draw_pixel(x0,y0,BLACK);
+                if(x0<x1)
+                    x0++;
+                else
+                    x0--;
+            }
+
+        }else{
+            
+            /* Bresenham line algorithm */
+            int dx = x1 - x0 >= 0 ? x1 - x0 : x0 - x1;
+            int sx = x0 < x1 ? 1 : -1;
+            int dy = y1 - y0 <= 0 ? y1 - y0 : y0 - y1;
+            int sy = y0 < y1 ? 1 : -1;
+            int err = dx + dy;
+
+            while((x0 != x1) && (y0 != y1)) {
+                epaper_draw_pixel(x0, y0 , BLACK);
+                if (2 * err >= dy) {     
+                    err += dy;
+                    x0 += sx;
+                }
+                if (2 * err <= dx) {
+                    err += dx; 
+                    y0 += sy;
+                }
+            }
         }
     }
+
 
     return ESP_OK;
 }

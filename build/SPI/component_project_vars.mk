@@ -1,8 +1,0 @@
-# Automatically generated build file. Do not edit.
-COMPONENT_INCLUDES += $(PROJECT_PATH)/components/SPI/include
-COMPONENT_LDFLAGS += -L$(BUILD_DIR_BASE)/SPI -lSPI
-COMPONENT_LINKER_DEPS += 
-COMPONENT_SUBMODULES += 
-COMPONENT_LIBRARIES += SPI
-COMPONENT_LDFRAGMENTS += 
-component-SPI-build: 

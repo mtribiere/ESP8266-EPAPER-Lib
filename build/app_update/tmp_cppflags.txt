@@ -1,1 +1,0 @@
-0.3-3-gb57ff13-dirty spi_epaper v3.4-rc-dirty
