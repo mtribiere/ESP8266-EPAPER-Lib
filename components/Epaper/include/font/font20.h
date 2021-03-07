@@ -42,7 +42,7 @@
 #define FONT_20_HEIGHT 20
 
 // Character bitmaps for Courier New 15pt
-uint8_t Font_20_table[] = 
+uint8_t Font_20_table[] PROGMEM = 
 {
 	// @0 ' ' (14 pixels wide)
 	0x00, 0x00, //               

@@ -42,7 +42,7 @@
 #define FONT_16_HEIGHT 16
 
 
-uint8_t Font_16_table[]  = 
+uint8_t Font_16_table[] PROGMEM = 
 {
 	// @0 ' ' (11 pixels wide)
 	0x00, 0x00, //            

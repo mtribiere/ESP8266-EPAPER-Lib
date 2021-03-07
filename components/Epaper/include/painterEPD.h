@@ -7,6 +7,10 @@
 #define BLACK 0
 #define WHITE 1
 
+//Define section to put in flash
+#define PROGMEM   ICACHE_RODATA_ATTR
+#define ICACHE_RODATA_ATTR  __attribute__((section(".irom.text")))
+
 //Define font struct
 typedef struct{
     uint16_t fontW; //Using 16 bits int to help memory management
